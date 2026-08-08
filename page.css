@@ -1,0 +1,526 @@
+/* Estilo Qadrant Original con Celdas Biseladas, PWA y Vista Mes Completo Ancho Total */
+:root {
+    --bg-main: #f0f4f8;
+    --card-bg: #ffffff;
+
+    /* Colores de turnos */
+    --color-M: #2196f3; /* Mañana - Azul */
+    --color-T: #4caf50; /* Tarde - Verde */
+    --color-N: #fbc02d; /* Noche - Amarillo */
+    --color-O: #9c27b0; /* Oficio - Púrpura */
+    --color-D: #ffffff; /* Descanso - Blanco */
+    --color-festivo: #e53935; /* Domingo / Festivo - Rojo */
+}
+
+body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-main);
+    color: #37474f;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    max-width: 580px;
+    margin: 0 auto;
+    transition: max-width 0.25s ease-in-out, width 0.25s ease-in-out;
+}
+
+/* En Modo Mes Completo aprovecha todo el ancho de pantalla en ordenador */
+.main-container.vista-mes-modo {
+    max-width: 98% !important;
+    width: 98% !important;
+}
+
+@media (min-width: 1200px) {
+    .main-container.vista-mes-modo {
+        max-width: 96% !important;
+    }
+}
+
+/* Cabecera */
+.header-container {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+.app-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #78909c;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.turno-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #d32f2f;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+/* Selector de Vista (Turno vs Mes Completo) */
+.view-toggle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.view-toggle-group {
+    background: #ffffff;
+    padding: 4px;
+    border-radius: 25px;
+    border: 1px solid #cfd8dc;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.view-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #546e7a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-btn.active {
+    background: #0d6efd;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(13, 110, 253, 0.3);
+}
+
+/* Controles de Navegación */
+.date-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #b0bec5;
+    background: #ffffff;
+    color: #455a64;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.nav-btn:hover {
+    background-color: #eceff1;
+    border-color: #78909c;
+}
+
+.date-select-inline {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px dotted #78909c;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #263238;
+    padding: 0 4px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    text-align-last: center;
+}
+
+.date-select-inline:focus {
+    border-bottom-color: #0d6efd;
+}
+
+/* --- VISTA 1: CALENDARIO DE UN SOLO TURNO --- */
+.calendar-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.weekdays-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #ffffff;
+    border-bottom: 1px solid #eeeeee;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #546e7a;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    padding: 4px;
+    background: #f8fafc;
+}
+
+/* Celda de Día Biselada */
+.day-cell {
+    background: #ffffff;
+    height: 68px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #212529;
+    user-select: none;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: transform 0.1s ease, filter 0.15s ease, opacity 0.15s ease;
+}
+
+.day-cell:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.97);
+}
+
+/* --- VISTA 2: MES COMPLETO (TODOS LOS TURNOS COMO FILAS Y DÍAS COMO COLUMNAS) --- */
+.full-month-card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.full-month-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    border: 1px solid #cfd8dc;
+    width: 100%;
+}
+
+.full-month-table {
+    border-collapse: separate;
+    border-spacing: 2px;
+    width: 100%;
+    min-width: 880px;
+    background-color: #f8fafc;
+}
+
+/* Sticky Column: Turnos */
+.full-month-table th.sticky-col,
+.full-month-table td.sticky-col {
+    position: sticky;
+    left: 0;
+    background-color: #ffffff;
+    z-index: 10;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.06);
+    border-right: 2px solid #cfd8dc;
+    text-align: center;
+    font-weight: 700;
+    color: #37474f;
+    min-width: 85px;
+    padding: 8px 6px;
+    font-size: 0.9rem;
+}
+
+/* Cabecera de Días */
+.full-month-table th.day-hdr {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #546e7a;
+    padding: 4px 2px;
+    background: #ffffff;
+}
+
+.full-month-table th.day-hdr.is-holiday {
+    color: var(--color-festivo);
+}
+
+.full-month-table th.day-num-hdr {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 4px 2px;
+    background: #ffffff;
+    border-bottom: 2px solid #cfd8dc;
+}
+
+.full-month-table th.day-num-hdr.is-holiday {
+    color: var(--color-festivo);
+}
+
+.full-month-table th.day-num-hdr.is-today {
+    background: #fff3e0;
+    color: #e65100;
+    border-radius: 4px;
+}
+
+/* Celdas de Turno en la Tabla de Mes Completo */
+.matrix-cell {
+    height: 44px;
+    min-width: 26px;
+    border-radius: 6px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    font-weight: 800;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 0 rgba(0, 0, 0, 0.12);
+    user-select: none;
+    transition: transform 0.1s ease;
+}
+
+.matrix-cell:hover {
+    transform: scale(1.05);
+    z-index: 2;
+}
+
+.matrix-cell.is-today {
+    border: 2px solid #ff9800 !important;
+}
+
+/* Estilos de Turnos Biselados */
+.shift-M {
+    background-color: var(--color-M) !important;
+    color: #ffffff !important;
+    border-color: #1976d2 !important;
+    box-shadow: inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.4), inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.25), 0 2px 4px rgba(33, 150, 243, 0.25);
+}
+
+.shift-T {
+    background-color: var(--color-T) !important;
+    color: #ffffff !important;
+    border-color: #388e3c !important;
+    box-shadow: inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.4), inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.25), 0 2px 4px rgba(76, 175, 80, 0.25);
+}
+
+.shift-N {
+    background-color: var(--color-N) !important;
+    color: #000000 !important;
+    border-color: #f57f17 !important;
+    box-shadow: inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.6), inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.2), 0 2px 4px rgba(251, 192, 45, 0.25);
+}
+
+.shift-O {
+    background-color: var(--color-O) !important;
+    color: #ffffff !important;
+    border-color: #7b1fa2 !important;
+    box-shadow: inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.4), inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.25), 0 2px 4px rgba(156, 39, 176, 0.25);
+}
+
+.shift-D {
+    background-color: var(--color-D) !important;
+    color: #37474f !important;
+    border-color: #e0e0e0 !important;
+}
+
+/* Días de Meses Anteriores / Siguientes en Vista Turno */
+.day-cell.other-month {
+    opacity: 0.7;
+    filter: saturate(0.7) brightness(1.05);
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.7), inset -1px -1px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+.day-cell.other-month .day-number {
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Domingos y Festivos: Texto Rojo en Vista Turno */
+.day-cell.is-holiday .day-number {
+    color: var(--color-festivo) !important;
+}
+
+/* Indicador de "HOY" */
+.day-cell.is-today {
+    border: 2px solid #ff9800 !important;
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.3), inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.4) !important;
+    z-index: 2;
+}
+
+.today-label {
+    position: absolute;
+    bottom: 3px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #ff9800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.day-cell.shift-M.is-today .today-label,
+.day-cell.shift-T.is-today .today-label,
+.day-cell.shift-O.is-today .today-label {
+    color: #ffffff;
+}
+
+/* Sección de Configuración / Footer */
+.config-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    padding: 16px;
+    margin: 20px auto 0 auto;
+    max-width: 580px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.config-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #78909c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.config-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.config-label-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.config-label-main {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #263238;
+}
+
+.config-label-sub {
+    font-size: 0.75rem;
+    color: #90a4ae;
+}
+
+.config-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.config-select {
+    border-radius: 8px;
+    border: 1px solid #cfd8dc;
+    padding: 6px 12px;
+    font-weight: 600;
+    color: #37474f;
+    font-size: 0.9rem;
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* Botón Candado (Bloquear Vista) */
+.lock-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid #cfd8dc;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #78909c;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lock-btn:hover {
+    background-color: #f1f5f9;
+    color: #37474f;
+}
+
+.lock-btn.locked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(13, 110, 253, 0.3);
+}
+
+.lock-btn.locked:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+    color: #ffffff;
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 0.78rem;
+    color: #90a4ae;
+    margin-top: 16px;
+    margin-bottom: 20px;
+}
+
+/* Responsividad táctil */
+@media (max-width: 480px) {
+    .day-cell {
+        height: 56px;
+        font-size: 1.05rem;
+        border-radius: 6px;
+    }
+}
+
+/* Botón de Exportación estilo Excel */
+.export-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.export-main-btn {
+    background: linear-gradient(135deg, #107c41 0%, #1f9a55 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(16, 124, 65, 0.25);
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.export-main-btn:hover {
+    background: linear-gradient(135deg, #0e6c38 0%, #188649 100%);
+    box-shadow: 0 4px 12px rgba(16, 124, 65, 0.35);
+    transform: translateY(-1px);
+}
+
+.export-main-btn:active {
+    transform: translateY(0);
+}

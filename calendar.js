@@ -244,7 +244,7 @@ window.CanvasCalendar = {
         var configCard = document.getElementById('config-card');
         var mainContainer = document.querySelector('.main-container');
 
-        if (appTitleEl) appTitleEl.innerText = "QADRANT " + thisYear;
+        if (appTitleEl) appTitleEl.innerText = "QADRANT INFINITO";
         if (monthSelect) monthSelect.value = thisMonth;
         if (yearSelect) yearSelect.value = thisYear;
 

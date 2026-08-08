@@ -25,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script type="text/javascript" src="cuadrante_data.js"></script>
-    <script type="text/javascript" src="calendar.js?v=2.1" defer></script>
+    <script type="text/javascript" src="calendar.js?v=2.2" defer></script>
 </head>
 <body>
     <div class="main-container py-3 px-2">
@@ -139,13 +139,19 @@
                     </p>
                     <div class="mb-3">
                         <label for="exportYearSelect" class="form-label fw-bold">Año a exportar:</label>
-                        <select id="exportYearSelect" class="form-select form-select-lg">
+                        <select id="exportYearSelect" class="form-select form-select-lg" onchange="actualizarJornadaPorAño()">
                             <!-- Se llena dinámicamente con JS (por defecto año actual) -->
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="exportJornadaInput" class="form-label fw-bold">Jornada Anual (horas):</label>
-                        <input type="number" id="exportJornadaInput" class="form-control" value="1672" min="1" max="3000">
+                        <label for="exportJornadaSelect" class="form-label fw-bold">Jornada Anual (trabajo efectivo en cómputo anual):</label>
+                        <select id="exportJornadaSelect" class="form-select form-select-lg">
+                            <option value="1696">Año 2024: 1.696 horas de trabajo efectivo</option>
+                            <option value="1680">Año 2025: 1.680 horas de trabajo efectivo</option>
+                            <option value="1672" selected>Año 2026: 1.672 horas de trabajo efectivo</option>
+                            <option value="1664">Año 2027: 1.664 horas de trabajo efectivo</option>
+                            <option value="1656">Año 2028: 1.656 horas de trabajo efectivo</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer bg-light">

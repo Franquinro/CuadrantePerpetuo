@@ -549,6 +549,22 @@ window.turnoMenos = function () {
 
 // --- FUNCIONALIDAD DE EXPORTACIÓN A EXCEL (.XLSX) ---
 var modalExportarInstance = null;
+var JORNADAS_OFICIALES = {
+    2024: 1696,
+    2025: 1680,
+    2026: 1672,
+    2027: 1664,
+    2028: 1656
+};
+
+window.actualizarJornadaPorAño = function () {
+    var yearSelect = document.getElementById('exportYearSelect');
+    var jornadaSelect = document.getElementById('exportJornadaSelect');
+    if (!yearSelect || !jornadaSelect) return;
+    var selYear = parseInt(yearSelect.value);
+    var horas = JORNADAS_OFICIALES[selYear] || 1672;
+    jornadaSelect.value = horas.toString();
+};
 
 window.abrirModalExportar = function () {
     var yearSelect = document.getElementById('exportYearSelect');
@@ -563,10 +579,7 @@ window.abrirModalExportar = function () {
         }
     }
 
-    var jornadaInput = document.getElementById('exportJornadaInput');
-    if (jornadaInput && (!jornadaInput.value || parseInt(jornadaInput.value) <= 0)) {
-        jornadaInput.value = "1672";
-    }
+    actualizarJornadaPorAño();
 
     var modalEl = document.getElementById('modalExportar');
     if (modalEl && typeof bootstrap !== 'undefined') {
@@ -577,10 +590,10 @@ window.abrirModalExportar = function () {
 
 window.confirmarExportacionExcel = function () {
     var yearSelect = document.getElementById('exportYearSelect');
-    var jornadaInput = document.getElementById('exportJornadaInput');
+    var jornadaSelect = document.getElementById('exportJornadaSelect');
 
     var selYear = yearSelect ? parseInt(yearSelect.value) : thisYear;
-    var jornada = jornadaInput ? parseInt(jornadaInput.value) : 1672;
+    var jornada = jornadaSelect ? parseInt(jornadaSelect.value) : 1672;
 
     if (isNaN(selYear)) selYear = thisYear;
     if (isNaN(jornada) || jornada <= 0) jornada = 1672;
@@ -855,54 +868,58 @@ window.generarExcelCuadrante = function (anio, jornadaHoras) {
     // --- SECCIÓN TOTALIZADOR / CALCULADORA DE JORNADA FINAL ---
     // Celdas combinadas de 2 columnas para evitar recortes de texto/números
     
-    // Fila Encabezado Calculadora (Merged A:R = 18 cols = 9 campos x 2 cols)
-    ws.mergeCells(currentRow, 1, currentRow, 18);
+    // Fila Encabezado Calculadora (Merged A:AK = 37 cols)
+    ws.mergeCells(currentRow, 1, currentRow, 37);
     var calcTitle = ws.getCell(currentRow, 1);
     calcTitle.value = "CALCULADORA Y TOTALIZADOR DE JORNADA ANUAL";
     calcTitle.font = { name: 'Arial', size: 13, bold: true, color: { argb: 'FFFFFFFF' } };
     calcTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F4E78' } };
     calcTitle.alignment = { horizontal: 'center', vertical: 'middle' };
     ws.getRow(currentRow).height = 30;
-    for (var c = 1; c <= 18; c++) {
+    for (var c = 1; c <= 37; c++) {
         ws.getCell(currentRow, c).border = borderThin;
     }
     currentRow++;
 
-    // Fila Parámetro de Jornada Anual
+    // Fila Parámetro de Jornada Anual (A..AK = 37 cols)
     var rParam = currentRow;
     ws.getRow(rParam).height = 24;
 
-    ws.mergeCells(rParam, 1, rParam, 3); // Cols A..C
+    ws.mergeCells(rParam, 1, rParam, 7); // A..G (7 cols)
     var pLbl1 = ws.getCell(rParam, 1);
     pLbl1.value = "Jornada Anual (horas):";
     pLbl1.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF1F4E78' } };
     pLbl1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9E1F2' } };
     pLbl1.alignment = { horizontal: 'right', vertical: 'middle' };
 
-    ws.mergeCells(rParam, 4, rParam, 5); // Cols D..E
-    var pVal1 = ws.getCell(rParam, 4);
+    ws.mergeCells(rParam, 8, rParam, 12); // H..L (5 cols)
+    var pVal1 = ws.getCell(rParam, 8);
     pVal1.value = jornadaHoras;
     pVal1.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF1F4E78' } };
     pVal1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFCE4D6' } };
     pVal1.alignment = { horizontal: 'center', vertical: 'middle' };
     pVal1.numFmt = '#,##0';
 
-    ws.mergeCells(rParam, 6, rParam, 8); // Cols F..H
-    var pLbl2 = ws.getCell(rParam, 6);
+    ws.mergeCells(rParam, 13, rParam, 20); // M..T (8 cols)
+    var pLbl2 = ws.getCell(rParam, 13);
     pLbl2.value = "Días a trabajar (Jornada/8):";
     pLbl2.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF1F4E78' } };
     pLbl2.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9E1F2' } };
     pLbl2.alignment = { horizontal: 'right', vertical: 'middle' };
 
-    ws.mergeCells(rParam, 9, rParam, 10); // Cols I..J
-    var pVal2 = ws.getCell(rParam, 9);
-    pVal2.value = { formula: 'D' + rParam + '/8' };
+    ws.mergeCells(rParam, 21, rParam, 25); // U..Y (5 cols)
+    var pVal2 = ws.getCell(rParam, 21);
+    pVal2.value = { formula: 'H' + rParam + '/8' };
     pVal2.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF276A3C' } };
     pVal2.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2EFDA' } };
     pVal2.alignment = { horizontal: 'center', vertical: 'middle' };
     pVal2.numFmt = '#,##0';
 
-    for (var c = 1; c <= 18; c++) {
+    ws.mergeCells(rParam, 26, rParam, 37); // Z..AK (12 cols)
+    var pFill = ws.getCell(rParam, 26);
+    pFill.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9E1F2' } };
+
+    for (var c = 1; c <= 37; c++) {
         ws.getCell(rParam, c).border = borderThin;
     }
     currentRow++;
@@ -911,20 +928,20 @@ window.generarExcelCuadrante = function (anio, jornadaHoras) {
     ws.getRow(currentRow).height = 10;
     currentRow++;
 
-    // Fila Cabecera Tabla Calculadora (Combinando 2 columnas por cada campo)
+    // Fila Cabecera Tabla Calculadora (37 columnas repartidas entre 9 campos)
     var rCalcHdr = currentRow;
     ws.getRow(rCalcHdr).height = 24;
 
     var calcHeaders = [
-        { label: "Turno", startCol: 1, endCol: 2 },
-        { label: "Días a Trabajar", startCol: 3, endCol: 4 },
-        { label: "Total M", startCol: 5, endCol: 6 },
-        { label: "Total T", startCol: 7, endCol: 8 },
-        { label: "Total N", startCol: 9, endCol: 10 },
-        { label: "Total O", startCol: 11, endCol: 12 },
-        { label: "Total Trabajados", startCol: 13, endCol: 14 },
-        { label: "Diferencia", startCol: 15, endCol: 16 },
-        { label: "Total V", startCol: 17, endCol: 18 }
+        { label: "Turno", startCol: 1, endCol: 3 },            // A..C (3 cols)
+        { label: "Días a Trabajar", startCol: 4, endCol: 7 },  // D..G (4 cols)
+        { label: "Total M", startCol: 8, endCol: 11 },         // H..K (4 cols)
+        { label: "Total T", startCol: 12, endCol: 15 },        // L..O (4 cols)
+        { label: "Total N", startCol: 16, endCol: 19 },        // P..S (4 cols)
+        { label: "Total O", startCol: 20, endCol: 23 },        // T..W (4 cols)
+        { label: "Total Trabajados", startCol: 24, endCol: 28 }, // X..AB (5 cols)
+        { label: "Diferencia", startCol: 29, endCol: 32 },     // AC..AF (4 cols)
+        { label: "Total V", startCol: 33, endCol: 37 }          // AG..AK (5 cols)
     ];
 
     calcHeaders.forEach(function (h) {
@@ -936,80 +953,80 @@ window.generarExcelCuadrante = function (anio, jornadaHoras) {
         hCell.alignment = { horizontal: 'center', vertical: 'middle' };
     });
 
-    for (var c = 1; c <= 18; c++) {
+    for (var c = 1; c <= 37; c++) {
         ws.getCell(rCalcHdr, c).border = borderThin;
     }
     currentRow++;
 
-    // Filas de Datos del Totalizador por Turno (A..F), ocupando 2 columnas por celda
-    var diasTrabajarRefCell = 'I' + rParam;
+    // Filas de Datos del Totalizador por Turno (A..F), ocupando todo el ancho (Cols A..AK)
+    var diasTrabajarRefCell = 'U' + rParam;
 
     for (var t = 0; t < 6; t++) {
         var rTot = currentRow;
         ws.getRow(rTot).height = 22;
         var mRows = turnoSummaryRows[t];
 
-        // 1. Turno (A:B)
-        ws.mergeCells(rTot, 1, rTot, 2);
+        // 1. Turno (A..C)
+        ws.mergeCells(rTot, 1, rTot, 3);
         var c1 = ws.getCell(rTot, 1);
         c1.value = turnosNombres[t];
         c1.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF37474F' } };
         c1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F4F8' } };
 
-        // 2. Días a Trabajar (C:D)
-        ws.mergeCells(rTot, 3, rTot, 4);
-        var c2 = ws.getCell(rTot, 3);
+        // 2. Días a Trabajar (D..G)
+        ws.mergeCells(rTot, 4, rTot, 7);
+        var c2 = ws.getCell(rTot, 4);
         c2.value = { formula: diasTrabajarRefCell };
         c2.font = { name: 'Arial', size: 10, bold: true };
         c2.numFmt = '#,##0';
 
-        // 3. Total M (E:F)
-        ws.mergeCells(rTot, 5, rTot, 6);
-        var c3 = ws.getCell(rTot, 5);
+        // 3. Total M (H..K)
+        ws.mergeCells(rTot, 8, rTot, 11);
+        var c3 = ws.getCell(rTot, 8);
         c3.value = { formula: 'SUM(' + mRows.map(r => 'AG' + r).join(',') + ')' };
         c3.font = { name: 'Arial', size: 10, bold: true };
 
-        // 4. Total T (G:H)
-        ws.mergeCells(rTot, 7, rTot, 8);
-        var c4 = ws.getCell(rTot, 7);
+        // 4. Total T (L..O)
+        ws.mergeCells(rTot, 12, rTot, 15);
+        var c4 = ws.getCell(rTot, 12);
         c4.value = { formula: 'SUM(' + mRows.map(r => 'AH' + r).join(',') + ')' };
         c4.font = { name: 'Arial', size: 10, bold: true };
 
-        // 5. Total N (I:J)
-        ws.mergeCells(rTot, 9, rTot, 10);
-        var c5 = ws.getCell(rTot, 9);
+        // 5. Total N (P..S)
+        ws.mergeCells(rTot, 16, rTot, 19);
+        var c5 = ws.getCell(rTot, 16);
         c5.value = { formula: 'SUM(' + mRows.map(r => 'AI' + r).join(',') + ')' };
         c5.font = { name: 'Arial', size: 10, bold: true };
 
-        // 6. Total O (K:L)
-        ws.mergeCells(rTot, 11, rTot, 12);
-        var c6 = ws.getCell(rTot, 11);
+        // 6. Total O (T..W)
+        ws.mergeCells(rTot, 20, rTot, 23);
+        var c6 = ws.getCell(rTot, 20);
         c6.value = { formula: 'SUM(' + mRows.map(r => 'AJ' + r).join(',') + ')' };
         c6.font = { name: 'Arial', size: 10, bold: true };
 
-        // 7. Total Trabajados (M:N)
-        ws.mergeCells(rTot, 13, rTot, 14);
-        var c7 = ws.getCell(rTot, 13);
-        c7.value = { formula: 'E' + rTot + '+G' + rTot + '+I' + rTot + '+K' + rTot };
+        // 7. Total Trabajados (X..AB)
+        ws.mergeCells(rTot, 24, rTot, 28);
+        var c7 = ws.getCell(rTot, 24);
+        c7.value = { formula: 'H' + rTot + '+L' + rTot + '+P' + rTot + '+T' + rTot };
         c7.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF1F4E78' } };
         c7.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2EFDA' } };
 
-        // 8. Diferencia (O:P)
-        ws.mergeCells(rTot, 15, rTot, 16);
-        var c8 = ws.getCell(rTot, 15);
-        c8.value = { formula: 'C' + rTot + '-M' + rTot };
+        // 8. Diferencia (AC..AF)
+        ws.mergeCells(rTot, 29, rTot, 32);
+        var c8 = ws.getCell(rTot, 29);
+        c8.value = { formula: 'D' + rTot + '-X' + rTot };
         c8.font = { name: 'Arial', size: 10, bold: true };
         c8.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F4F8' } };
         c8.numFmt = '#,##0;[Red]-#,##0';
 
-        // 9. Total V (Q:R)
-        ws.mergeCells(rTot, 17, rTot, 18);
-        var c9 = ws.getCell(rTot, 17);
+        // 9. Total V (AG..AK)
+        ws.mergeCells(rTot, 33, rTot, 37);
+        var c9 = ws.getCell(rTot, 33);
         c9.value = { formula: 'SUM(' + mRows.map(r => 'AK' + r).join(',') + ')' };
         c9.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF9C0006' } };
         c9.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFCE4D6' } };
 
-        for (var c = 1; c <= 18; c++) {
+        for (var c = 1; c <= 37; c++) {
             var cell = ws.getCell(rTot, c);
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
             cell.border = borderThin;

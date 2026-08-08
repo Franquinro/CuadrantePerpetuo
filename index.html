@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Qadrant Perpetuo</title>
-    <meta name="description" content="Cuadrante Generación Canarias (2005 - 2040)">
+    <title>Qadrant Infinito</title>
+    <meta name="description" content="Cuadrante Perpetuo Generación Canarias">
     <meta name="theme-color" content="#0d6efd">
 
     <!-- PWA Manifest & Icons -->
@@ -12,7 +13,7 @@
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Qadrant">
+    <meta name="apple-mobile-web-app-title" content="Qadrant Infinito">
 
     <!-- Fuentes y Estilos -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -25,16 +26,17 @@
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script type="text/javascript" src="cuadrante_data.js"></script>
-    <script type="text/javascript" src="calendar.js?v=2.2" defer></script>
+    <script type="text/javascript" src="calendar.js?v=2.3" defer></script>
 </head>
+
 <body>
     <div class="main-container py-3 px-2">
-        
+
         <!-- Cabecera estilo Qadrant Original -->
         <header class="header-container">
-            <div id="appTitle" class="app-title">QADRANT 2026</div>
+            <div id="appTitle" class="app-title">QADRANT INFINITO</div>
             <div id="turno" class="turno-title">TURNO A</div>
-            
+
             <!-- Selector de Vista (Turno vs Mes Completo) -->
             <div class="view-toggle-container">
                 <div class="view-toggle-group">
@@ -49,7 +51,8 @@
 
             <!-- Botón Exportar Cuadrante -->
             <div class="export-btn-container mb-2 text-center">
-                <button id="btnExportar" type="button" class="export-main-btn" onclick="abrirModalExportar()" title="Exportar cuadrante a Excel">
+                <button id="btnExportar" type="button" class="export-main-btn" onclick="abrirModalExportar()"
+                    title="Exportar cuadrante a Excel">
                     📥 Exportar Cuadrante ...
                 </button>
             </div>
@@ -71,7 +74,13 @@
         <div id="calendar-container" class="calendar-card">
             <!-- Cabecera Días de la Semana -->
             <div class="weekdays-header">
-                <div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div><div>D</div>
+                <div>L</div>
+                <div>M</div>
+                <div>X</div>
+                <div>J</div>
+                <div>V</div>
+                <div>S</div>
+                <div>D</div>
             </div>
             <!-- Celdas del Mes -->
             <div id="calendar-grid" class="days-grid">
@@ -87,13 +96,16 @@
         <!-- Sección Configuración Personal (Solo visible en Vista por Turno) -->
         <div id="config-card" class="config-card">
             <div class="config-header">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                    </path>
                 </svg>
                 <span>CONFIGURACIÓN PERSONAL</span>
             </div>
-            
+
             <div class="config-body">
                 <div class="config-label-group">
                     <span class="config-label-main">Mi Turno</span>
@@ -109,8 +121,10 @@
                         <option value="4">Turno E</option>
                         <option value="5">Turno F</option>
                     </select>
-                    <button id="lockBtn" class="lock-btn" onclick="toggleLockTurno()" title="Bloquear / Guardar turno por defecto">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <button id="lockBtn" class="lock-btn" onclick="toggleLockTurno()"
+                        title="Bloquear / Guardar turno por defecto">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
@@ -131,20 +145,25 @@
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title fw-bold" id="modalExportarLabel">📥 Exportar Cuadrante a Excel</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4">
                     <p class="text-secondary small mb-3">
-                        Se generará un archivo Excel (.xlsx) con una sola hoja (Cuadrante Provisional YYYY) conteniendo los 12 meses del año seleccionado, fórmulas dinámicas de turnos (M, T, N, O, V) y una calculadora de jornada laboral.
+                        Se generará un archivo Excel (.xlsx) con una sola hoja (Cuadrante Provisional YYYY) conteniendo
+                        los 12 meses del año seleccionado, fórmulas dinámicas de turnos (M, T, N, O, V) y una
+                        calculadora de jornada laboral.
                     </p>
                     <div class="mb-3">
                         <label for="exportYearSelect" class="form-label fw-bold">Año a exportar:</label>
-                        <select id="exportYearSelect" class="form-select form-select-lg" onchange="actualizarJornadaPorAño()">
+                        <select id="exportYearSelect" class="form-select form-select-lg"
+                            onchange="actualizarJornadaPorAño()">
                             <!-- Se llena dinámicamente con JS (por defecto año actual) -->
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="exportJornadaSelect" class="form-label fw-bold">Jornada Anual (trabajo efectivo en cómputo anual):</label>
+                        <label for="exportJornadaSelect" class="form-label fw-bold">Jornada Anual (trabajo efectivo en
+                            cómputo anual):</label>
                         <select id="exportJornadaSelect" class="form-select form-select-lg">
                             <option value="1696">Año 2024: 1.696 horas de trabajo efectivo</option>
                             <option value="1680">Año 2025: 1.680 horas de trabajo efectivo</option>
@@ -155,8 +174,10 @@
                     </div>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="confirmarExportacionExcel()">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold"
+                        onclick="confirmarExportacionExcel()">
                         📊 Descargar Excel
                     </button>
                 </div>
@@ -164,4 +185,5 @@
         </div>
     </div>
 </body>
+
 </html>

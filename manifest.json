@@ -1,7 +1,7 @@
 {
-  "name": "Qadrant Perpetuo",
-  "short_name": "Qadrant",
-  "description": "Cuadrante de Turnos Generación Canarias (2005 - 2040)",
+  "name": "Qadrant Infinito",
+  "short_name": "Qadrant Infinito",
+  "description": "Cuadrante de Turnos Perpetuo Generación Canarias",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",

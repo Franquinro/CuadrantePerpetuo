@@ -524,3 +524,99 @@ body {
 .export-main-btn:active {
     transform: translateY(0);
 }
+
+/* Responsividad y Optimización Vertical para Pantallas Móviles */
+@media (max-width: 576px) {
+    .main-container {
+        padding-top: 6px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .header-container {
+        padding-top: 4px;
+        padding-bottom: 6px;
+    }
+
+    .app-title {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        margin-bottom: 0px;
+    }
+
+    .turno-title {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+    }
+
+    .view-toggle-container {
+        margin-bottom: 6px;
+    }
+
+    .view-btn {
+        padding: 4px 12px;
+        font-size: 0.78rem;
+    }
+
+    .export-btn-container {
+        margin-top: 2px;
+        margin-bottom: 6px !important;
+    }
+
+    .export-main-btn {
+        padding: 4px 14px;
+        font-size: 0.78rem;
+    }
+
+    .date-nav {
+        margin-bottom: 6px;
+    }
+
+    .calendar-card {
+        padding: 8px 6px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+    }
+
+    .weekdays-header {
+        margin-bottom: 4px;
+        font-size: 0.82rem;
+    }
+
+    .days-grid {
+        gap: 4px;
+    }
+
+    .day-cell {
+        height: 48px;
+        font-size: 0.95rem;
+        border-radius: 8px;
+    }
+
+    .day-number {
+        font-size: 0.98rem;
+    }
+
+    .config-card {
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 380px) {
+    .day-cell {
+        height: 43px;
+        font-size: 0.9rem;
+    }
+
+    .day-number {
+        font-size: 0.92rem;
+    }
+
+    .days-grid {
+        gap: 3px;
+    }
+
+    .view-btn {
+        padding: 3px 10px;
+        font-size: 0.75rem;
+    }
+}

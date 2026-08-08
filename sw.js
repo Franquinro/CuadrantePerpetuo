@@ -1,9 +1,9 @@
-const CACHE_NAME = 'qadrant-v2.2';
+const CACHE_NAME = 'qadrant-v2.3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './page.css',
-  './calendar.js?v=2.2',
+  './calendar.js?v=2.3',
   './cuadrante_data.js',
   './cuadrante_perpetuo_iniciales.csv',
   './manifest.json',

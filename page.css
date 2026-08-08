@@ -39,53 +39,70 @@ body {
     }
 }
 
-/* Cabecera */
+/* Cabecera Ultra-Compacta */
 .header-container {
     text-align: center;
-    padding-top: 15px;
-    padding-bottom: 10px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+}
+
+.header-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
 .app-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    color: #78909c;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #607d8b;
     text-transform: uppercase;
-    margin-bottom: 2px;
+    margin-bottom: 0;
+}
+
+.title-separator {
+    color: #b0bec5;
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 .turno-title {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: #d32f2f;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
-/* Selector de Vista (Turno vs Mes Completo) */
-.view-toggle-container {
+/* Fila de Controles (Selector de Vista + Botón Exportar) */
+.header-controls-row {
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
 }
 
 .view-toggle-group {
     background: #ffffff;
-    padding: 4px;
-    border-radius: 25px;
+    padding: 3px;
+    border-radius: 20px;
     border: 1px solid #cfd8dc;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .view-btn {
     border: none;
     background: transparent;
-    padding: 6px 16px;
-    border-radius: 20px;
+    padding: 4px 12px;
+    border-radius: 16px;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #546e7a;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -102,8 +119,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 6px;
+    margin-bottom: 8px;
 }
 
 .nav-btn {

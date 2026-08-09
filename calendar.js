@@ -318,13 +318,16 @@ window.CanvasCalendar = {
                 dayNumSpan.innerText = dayNumber;
                 cell.appendChild(dayNumSpan);
 
-                var shiftCode = calcularTurno(targetYear, targetMonth, dayNumber, turno);
+                var mStr = targetMonth.toString().padStart(2, '0');
+                var dStr = dayNumber.toString().padStart(2, '0');
+                var dateKey = targetYear.toString() + "-" + mStr + "-" + dStr;
+
+                var shifts = cuadranteMap[dateKey];
+                var shiftCode = (shifts && shifts[turno]) ? shifts[turno] : '';
                 if (shiftCode) {
                     cell.classList.add('shift-' + shiftCode);
                 }
 
-                var mStr = targetMonth.toString().padStart(2, '0');
-                var dStr = dayNumber.toString().padStart(2, '0');
                 var dateString = targetYear.toString() + mStr + dStr;
 
                 var cellDateObj = new Date(targetYear, targetMonth - 1, dayNumber);

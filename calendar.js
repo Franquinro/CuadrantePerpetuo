@@ -1,5 +1,5 @@
 /**
- * Qadrant - Motor del Calendario Perpetuo (2005 - 2040)
+ * Qadrant - Motor del Calendario Perpetuo (2005 - 2050)
  * Soporta PWA Offline, Guardado de Turno Predeterminado (Candado) y Vista Mes Completo
  */
 
@@ -29,7 +29,7 @@ var isTurnoLocked = false;
 
 // Rango de años soportados por el cuadrante
 var primerAnio = 2005;
-var ultimoAnyo = 2040;
+var ultimoAnyo = 2050;
 
 // Mapa de datos del cuadrante: Key "YYYY-MM-DD" -> Array [shiftA, shiftB, shiftC, shiftD, shiftE, shiftF]
 var cuadranteMap = {};
@@ -144,7 +144,7 @@ window.CanvasCalendar = {
     },
 
     loadCSV: function (callback) {
-        var csvFile = 'cuadrante_perpetuo_iniciales.csv';
+        var csvFile = 'cuadrante_perpetuo_iniciales_2050.csv';
         fetch(csvFile)
             .then(function (response) {
                 if (!response.ok) throw new Error("HTTP " + response.status);

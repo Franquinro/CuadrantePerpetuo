@@ -232,10 +232,10 @@ window.CanvasCalendar = {
     },
 
     refreshCalendar: function () {
-        var textoTurno = ["TURNO A", "TURNO B", "TURNO C", "TURNO D", "TURNO E", "TURNO F"];
+        var letrasTurno = ["A", "B", "C", "D", "E", "F"];
         
-        var turnoEl = document.getElementById("turno");
         var appTitleEl = document.getElementById("appTitle");
+        var btnVistaTurno = document.getElementById("btnVistaTurno");
         var monthSelect = document.getElementById("monthSelect");
         var yearSelect = document.getElementById("yearSelect");
 
@@ -245,15 +245,12 @@ window.CanvasCalendar = {
         var mainContainer = document.querySelector('.main-container');
 
         if (appTitleEl) appTitleEl.innerText = "QADRANT INFINITO";
+        if (btnVistaTurno) btnVistaTurno.innerHTML = "📅 Turno " + (letrasTurno[turno] || "A");
         if (monthSelect) monthSelect.value = thisMonth;
         if (yearSelect) yearSelect.value = thisYear;
 
         if (vistaActual === 'turno') {
             if (mainContainer) mainContainer.classList.remove('vista-mes-modo');
-            if (turnoEl) {
-                turnoEl.innerText = textoTurno[turno];
-                turnoEl.style.display = 'block';
-            }
             if (containerTurno) containerTurno.style.display = 'block';
             if (containerFull) containerFull.style.display = 'none';
             if (configCard) configCard.style.display = 'block'; // Mostrar configuración en vista turno
@@ -262,10 +259,6 @@ window.CanvasCalendar = {
         } else {
             // Vista Mes Completo
             if (mainContainer) mainContainer.classList.add('vista-mes-modo');
-            if (turnoEl) {
-                turnoEl.innerText = "TODOS LOS TURNOS";
-                turnoEl.style.display = 'block';
-            }
             if (containerTurno) containerTurno.style.display = 'none';
             if (containerFull) containerFull.style.display = 'block';
             if (configCard) configCard.style.display = 'none'; // OCULTAR configuración en modo mes completo
@@ -284,11 +277,10 @@ window.CanvasCalendar = {
         var thisMonthLastDate = getLastDayOfMonth(thisMonth, thisYear);
 
         var firstDayObj = new Date(thisYear, thisMonth - 1, 1);
-        var thisMonthFirstDay = firstDayObj.getDay() - 1;
-        if (thisMonthFirstDay < 0) thisMonthFirstDay = 6; // Lunes=0, Domingo=6
+        var dateOffset = firstDayObj.getDay() - 1;
+        if (dateOffset < 0) dateOffset = 6; // Lunes=0, Domingo=6
 
         var monthDay = 0;
-        var dateOffset = thisMonthFirstDay;
 
         for (var j = 0; j < 6; j++) {
             for (var i = 0; i < 7; i++) {
@@ -300,27 +292,25 @@ window.CanvasCalendar = {
                 var targetYear = thisYear;
                 var targetMonth = thisMonth;
 
-                if (j === 0 && i < thisMonthFirstDay) {
-                    dayNumber = prevMonthLastDate - (dateOffset - i) + 1;
-                    cell.classList.add('other-month');
+                if (monthDay < dateOffset) {
+                    dayNumber = prevMonthLastDate - dateOffset + monthDay + 1;
                     targetMonth = thisMonth - 1;
                     if (targetMonth < 1) {
                         targetMonth = 12;
                         targetYear = thisYear - 1;
                     }
-                } else if (monthDay < thisMonthLastDate) {
-                    monthDay++;
-                    dayNumber = monthDay;
-                    isCurrentMonth = true;
-                } else {
-                    monthDay++;
-                    dayNumber = monthDay - thisMonthLastDate;
                     cell.classList.add('other-month');
+                } else if (monthDay >= dateOffset + thisMonthLastDate) {
+                    dayNumber = monthDay - dateOffset - thisMonthLastDate + 1;
                     targetMonth = thisMonth + 1;
                     if (targetMonth > 12) {
                         targetMonth = 1;
                         targetYear = thisYear + 1;
                     }
+                    cell.classList.add('other-month');
+                } else {
+                    dayNumber = monthDay - dateOffset + 1;
+                    isCurrentMonth = true;
                 }
 
                 var dayNumSpan = document.createElement('span');
@@ -328,40 +318,35 @@ window.CanvasCalendar = {
                 dayNumSpan.innerText = dayNumber;
                 cell.appendChild(dayNumSpan);
 
-                var yStr = targetYear.toString();
-                var mStr = targetMonth.toString().padStart(2, '0');
-                var dStr = dayNumber.toString().padStart(2, '0');
-                var dateKey = yStr + "-" + mStr + "-" + dStr;
-
-                var shifts = cuadranteMap[dateKey];
-                if (shifts) {
-                    var shiftCode = typeof shifts === 'string' ? shifts[turno] : shifts[turno];
-                    if (shiftCode) {
-                        cell.classList.add('shift-' + shiftCode);
-                    }
+                var shiftCode = calcularTurno(targetYear, targetMonth, dayNumber, turno);
+                if (shiftCode) {
+                    cell.classList.add('shift-' + shiftCode);
                 }
 
-                if (isCurrentMonth) {
-                    var dateString = thisYear.toString() + mStr + dStr;
+                var mStr = targetMonth.toString().padStart(2, '0');
+                var dStr = dayNumber.toString().padStart(2, '0');
+                var dateString = targetYear.toString() + mStr + dStr;
 
-                    if (i === 6 || festivos.includes(dateString)) {
-                        cell.classList.add('is-holiday');
-                    }
+                var cellDateObj = new Date(targetYear, targetMonth - 1, dayNumber);
+                var dowIdx = cellDateObj.getDay() - 1;
+                if (dowIdx < 0) dowIdx = 6;
 
-                    var today = new Date();
-                    if (dayNumber === today.getDate() &&
-                        thisMonth === (today.getMonth() + 1) &&
-                        thisYear === today.getFullYear()) {
-                        cell.classList.add('is-today');
+                if (dowIdx === 6 || festivos.includes(dateString)) {
+                    cell.classList.add('is-holiday');
+                }
 
-                        var todayLabel = document.createElement('span');
-                        todayLabel.className = 'today-label';
-                        todayLabel.innerText = 'HOY';
-                        cell.appendChild(todayLabel);
-                    }
+                var today = new Date();
+                if (dayNumber === today.getDate() && targetMonth === (today.getMonth() + 1) && targetYear === today.getFullYear()) {
+                    cell.classList.add('is-today');
+
+                    var todayLbl = document.createElement('span');
+                    todayLbl.className = 'today-label';
+                    todayLbl.innerText = 'HOY';
+                    cell.appendChild(todayLbl);
                 }
 
                 grid.appendChild(cell);
+                monthDay++;
             }
         }
     },
@@ -371,8 +356,9 @@ window.CanvasCalendar = {
         if (!container) return;
 
         var daysInMonth = getLastDayOfMonth(thisMonth, thisYear);
-        var dowInitials = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-        var turnos = ['Turno A', 'Turno B', 'Turno C', 'Turno D', 'Turno E', 'Turno F'];
+        var dowInitials = ["L", "M", "X", "J", "V", "S", "D"];
+        var turnos = ["Turno A", "Turno B", "Turno C", "Turno D", "Turno E", "Turno F"];
+        var turnosLetras = ["A", "B", "C", "D", "E", "F"];
 
         var html = '<div class="full-month-card">';
         html += '<div class="full-month-wrapper">';
@@ -380,7 +366,7 @@ window.CanvasCalendar = {
 
         // Fila 1: Iniciales de días de la semana
         html += '<thead><tr>';
-        html += '<th class="sticky-col">Turno</th>';
+        html += '<th class="sticky-col"><span class="turno-full-name">Turno</span><span class="turno-short-name">T</span></th>';
         for (var d = 1; d <= daysInMonth; d++) {
             var dateObj = new Date(thisYear, thisMonth - 1, d);
             var dowIdx = dateObj.getDay() - 1;
@@ -399,7 +385,7 @@ window.CanvasCalendar = {
 
         // Fila 2: Números de días
         html += '<tr>';
-        html += '<th class="sticky-col">Día</th>';
+        html += '<th class="sticky-col"><span class="turno-full-name">Día</span><span class="turno-short-name">D</span></th>';
         var today = new Date();
         for (var d = 1; d <= daysInMonth; d++) {
             var dateObj = new Date(thisYear, thisMonth - 1, d);
@@ -425,7 +411,7 @@ window.CanvasCalendar = {
         html += '<tbody>';
         for (var t = 0; t < 6; t++) {
             html += '<tr>';
-            html += '<td class="sticky-col">' + turnos[t] + '</td>';
+            html += '<td class="sticky-col"><span class="turno-full-name">' + turnos[t] + '</span><span class="turno-short-name">' + turnosLetras[t] + '</span></td>';
             
             for (var d = 1; d <= daysInMonth; d++) {
                 var mStr = thisMonth.toString().padStart(2, '0');

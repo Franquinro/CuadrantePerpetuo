@@ -26,7 +26,7 @@
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script type="text/javascript" src="cuadrante_data.js"></script>
-    <script type="text/javascript" src="calendar.js?v=3.1" defer></script>
+    <script type="text/javascript" src="calendar.js?v=3.2" defer></script>
 </head>
 
 <body>
@@ -36,23 +36,21 @@
         <header class="header-container">
             <div class="header-top-bar">
                 <div id="appTitle" class="app-title">QADRANT INFINITO</div>
-                <span class="title-separator">•</span>
-                <div id="turno" class="turno-title">TURNO A</div>
             </div>
 
             <!-- Fila de Controles (Selector de Vista + Botón Exportar) -->
             <div class="header-controls-row">
                 <div class="view-toggle-group">
                     <button id="btnVistaTurno" type="button" class="view-btn active" onclick="setVista('turno')">
-                        📅 Turno
+                        📅 Turno A
                     </button>
                     <button id="btnVistaMes" type="button" class="view-btn" onclick="setVista('mes')">
-                        📊 Mes Completo
+                        📊 Mes
                     </button>
                 </div>
                 <button id="btnExportar" type="button" class="export-main-btn" onclick="abrirModalExportar()"
                     title="Exportar cuadrante a Excel">
-                    📥 Exportar
+                    📥 Exportar...
                 </button>
             </div>
 

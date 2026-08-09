@@ -637,3 +637,30 @@ body {
         font-size: 0.75rem;
     }
 }
+
+/* Manejo de nombres de turno largos vs cortos */
+.turno-full-name {
+    display: inline;
+}
+
+.turno-short-name {
+    display: none;
+}
+
+@media (max-width: 576px) {
+    .full-month-table th.sticky-col,
+    .full-month-table td.sticky-col {
+        min-width: 28px !important;
+        width: 28px !important;
+        padding: 4px 2px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .turno-full-name {
+        display: none !important;
+    }
+
+    .turno-short-name {
+        display: inline !important;
+    }
+}
